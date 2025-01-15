@@ -1,0 +1,65 @@
+const express = require('express');
+const app = express();
+const port = 8080;
+
+// Middleware json-Format
+app.use(express.json());
+
+let notes = [{
+    id: 1,
+    note: "My new Note",
+    autor: "Max Mustermann",
+    date: "2025-01-15",
+}];
+
+app.listen(port, () => {
+    console.log(`server running on http://localhost:${port}`);
+});
+
+app.get('/', (request, response) => {
+    response.send('Hello World');
+});
+
+app.get('/notes', (request, response) => {
+    response.json(notes);
+});
+
+app.get('/notes/:id', (request, response) => {
+    const id = parseInt(request.params.id);
+    const note = notes.find((note) => note.id === id);
+    if (note) {
+        response.json(note);
+    } else {
+        response.status(404).json({ message: `Note with id ${id} not found` });
+    }
+});
+
+app.post('/notes', (request, response) => {
+    const newNote = {
+        id: notes.length + 1,
+        note: request.body.note,
+        autor: request.body.autor,
+        date: request.body.date,
+    };
+    notes.push(newNote);
+    response.json(notes);
+});
+
+app.put('/notes/:id', (request, response) => {
+    const id = parseInt(request.params.id);
+    const note = notes.find((note) => note.id === id);
+    if (note) {
+        note.note = request.body.note;
+        note.autor = request.body.autor;
+        note.date = request.body.date
+        response.json(note);
+    } else {
+        response.status(404).json({ message: `Note with id ${id} not found` });
+    }
+});
+
+app.delete('/notes/:id', (request, response) => {
+    const id = parseInt(request.params.id);
+    notes = notes.filter((note) => note.id !== id);
+    response.json(notes);
+});
