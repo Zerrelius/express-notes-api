@@ -21,7 +21,6 @@ app.get('/', (request, response) => {
 });
 
 app.get('/notes', (request, response) => {
-    response.send("Notes: ");
     response.json(notes);
 });
 
@@ -29,10 +28,9 @@ app.get('/notes/:id', (request, response) => {
     const id = parseInt(request.params.id);
     const note = notes.find((note) => note.id === id);
     if (note) {
-        response.send("Note with ID: ");
         response.json(note);
     } else {
-        response.status(404).json({ message: `Note with id ${id} not found` });
+        response.status(404).json({ message: `Note with id ${id} not found`});
     }
 });
 
@@ -46,7 +44,6 @@ app.post('/notes', (request, response) => {
     };
     notes.push(newNote);
     response.json(notes);
-    response.send("Note has been stored");
 });
 
 app.put('/notes/:id', (request, response) => {
@@ -56,7 +53,6 @@ app.put('/notes/:id', (request, response) => {
         note.note = request.body.note;
         note.autor = request.body.autor;
         note.date = request.body.date;
-        response.send("Note has been updated.");
         response.json(note);
     } else {
         response.status(404).json({ message: `Note with id ${id} not found` });
@@ -73,6 +69,5 @@ app.delete('/notes/:id', (request, response) => {
     //         note.id = newId;
     //     };
     // });
-    response.send("Note was deleted, Remaining Notes: ")
     response.json(notes);
 });
